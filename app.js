@@ -22,24 +22,6 @@ let config = require('./config.json')
 let User = require('./models/users')
 let session = require('express-session')
 
-// Session
-
-app.set('trust proxy', 1) // trust first proxy
-app.use(session({
-  secret: 'keyboard cat',
-  key: 'sid'
-  // cookie: {
-  //   secure: true
-  // }
-}))
-// 
-// app.use(session({
-//   secret: 'keyboard cat',
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: { secure: true }
-// }))
-
 // Mongoose
 
 var mongoose = require('mongoose')
@@ -54,6 +36,12 @@ mongoose.Promise = global.Promise
 
 // Twitter
 
+app.use(session({
+  secret: 'keyboard cat',
+  key: 'sid',
+  resave: false,
+  saveUninitialized: true
+}))
 app.use(passport.initialize())
 app.use(passport.session()) // persistent login sessions
 
