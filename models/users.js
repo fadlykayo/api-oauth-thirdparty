@@ -9,10 +9,28 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  email: {
-    type: String
+  email: String,
+  token: String,
+  facebook: {
+    id: String,
+    token: String,
+    email: String,
+    name: String
   },
-  token: String
+  twitter: {
+    type: String
+    // id: String,
+    // token: String,
+    // tokenSecret: String,
+    // displayName: String,
+    // username: String
+  },
+  google: {
+    id: String,
+    token: String,
+    email: String,
+    name: String
+  }
 },
   {
     timestamps: true

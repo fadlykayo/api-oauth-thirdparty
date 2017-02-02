@@ -1,11 +1,12 @@
 let express = require('express')
 let router = express.Router()
-let passport = require('passport')
-let TwitterStrategy = require('passport-twitter')
-let config = require('../../../config.json')
 let userController = require('../../../controllers/users')
+let passport = require('passport')
+let TwitterStrategy = require('passport-twitter').Strategy
+let FacebookStrategy = require('passport-facebook').Strategy
+let GoogleStrategy = require('passport-google').Strategy
 
-router.get('/', userController.getUsers)
+router.get('/get', userController.getUsers)
 
 router.delete('/:id', userController.deleteUser)
 
@@ -15,34 +16,28 @@ router.post('/signin', userController.signIn)
 
 router.post('/signup', userController.signUp)
 
-// passport.use(new TwitterStrategy({
-//   consumerKey: config.twitter_api_key,
-//   consumerSecret: config.twitter_api_secret,
-//   callbackURL: 'http://localhost:3000/auth/twitter/index/callback'
-// },
-//   function (token, tokenSecret, profile, cb) {
-//     User.findOrCreate({ twitterId: profile.id }, function (err, user) {
-//       return cb(err, user)
-//     })
-//   }
-// ))
-//
-// router.get('/login', function (req, res) {
-//   passport.authenticate('twitter'));
-//   // let searchQuery = req.query.q
-//   // client.get('search/tweets', {q: searchQuery}, function (error, tweets, response) {
-//   //   const result = JSON.parse(response.body)
-//   //   console.log({result})
-//   //   res.send(tweets)
-//   // })
-// })
-//
-// router.get('/callback', function (req, res) {
-//   passport.authenticate('twitter', { failureRedirect: '/login' }),
-//   function(req, res) {
-//     // Successful authentication, redirect home.
-//     res.redirect('/');
-//   });
-// })
+router.get('/', passport.authenticate('twitter'))
+
+router.get('/callback', function (req, res) {
+  passport.authenticate('twitter', { failureRedirect: '/failed' }),
+  function (req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/success')
+  }
+})
+
+router.get('/failed', function (req, res) {
+  res.send('Twitter login failed')
+})
+
+router.get('/success', function (req, res) {
+  res.send('Twitter login success')
+  // let searchQuery = req.query.q
+  // client.get('search/tweets', {q: searchQuery}, function (error, tweets, response) {
+  //   const result = JSON.parse(response.body)
+  //   console.log({result})
+  //   res.send(tweets)
+  // })
+})
 
 module.exports = router

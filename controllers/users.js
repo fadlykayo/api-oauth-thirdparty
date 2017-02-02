@@ -1,7 +1,5 @@
 var express = require('express')
 var router = express.Router()
-let models = require('../models/users')
-let config = require('../config.json')
 let jwt = require('jsonwebtoken')
 let hash = require('password-hash')
 let Users = require('../models/users')
@@ -43,12 +41,11 @@ module.exports = {
   },
   signIn: (req, res) => {
     Users.find({username: req.body.username}).then(function (data) {
-      if (data[0].username !== req.body.username) {
+      if (data.length === 0) {
         res.json({success: false, message: 'Authentication failed. User not found.'})
       } else {
         if (hash.verify(req.body.password, data[0].password)) {
           let token = jwt.sign({data}, config.secret, {algorithm: 'HS256'}, {expiresIn: '1d'})
-          console.log(token)
           res.json({
             success: true,
             token: token
