@@ -3,6 +3,7 @@ var router = express.Router()
 let jwt = require('jsonwebtoken')
 let hash = require('password-hash')
 let Users = require('../models/users')
+let config = require('../config.json')
 
 module.exports = {
   getUsers: (req, res) => {
@@ -57,6 +58,17 @@ module.exports = {
     }).catch(function (err) {
       res.json(err)
     })
+  },
+  verify: (req, res, next) => {
+    // if (Us)
+    // passport.authenticate('twitter')
+    req.decoded = jwt.verify(req.header('Authorization'), config.secret)
+    console.log(req.decoded)
+    if (req.decoded) {
+      next()
+    } else {
+      res.json({message: 'Authentication failed.'})
+    }
   }
 }
 // fadly: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjpbeyJfaWQiOiI1ODkzMDc5OWQwM2MxMzJlMGE2NzNkZjMiLCJ1c2VybmFtZSI6ImZhZGx5IiwicGFzc3dvcmQiOiJzaGExJGFiN2U3ODg2JDEkYTMxMmU0MTVkYWNlMjcwNTZlMmM2ZWMyZTkzZTNlMTlkYjMwYWQxOCIsImNyZWF0ZWRBdCI6IjIwMTctMDItMDJUMTA6MTk6MDUuMTcwWiIsInVwZGF0ZWRBdCI6IjIwMTctMDItMDJUMTA6MTk6MDUuMTcwWiIsIl9fdiI6MH1dLCJpYXQiOjE0ODYwMzEwNTZ9.G-Ao8O1gK0vRxjaZ5byAgZ9aTI1TqJxdgcr3YvLTFpA

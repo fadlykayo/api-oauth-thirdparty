@@ -21,12 +21,6 @@ router.get('/failed', function (req, res) {
 
 router.get('/success', function (req, res) {
   res.send('Facebook login success')
-  // let searchQuery = req.query.q
-  // client.get('search/tweets', {q: searchQuery}, function (error, tweets, response) {
-  //   const result = JSON.parse(response.body)
-  //   console.log({result})
-  //   res.send(tweets)
-  // })
 })
 
 module.exports = router
