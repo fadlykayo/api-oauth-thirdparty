@@ -16,24 +16,6 @@ router.post('/signin', userController.signIn)
 
 router.post('/signup', userController.signUp)
 
-router.get('/', passport.authenticate('twitter', { failureRedirect: '/failed' }))
-
-router.get('/callback', function (req, res) {
-  console.log('login with twitter success')
-})
-
-router.get('/failed', function (req, res) {
-  res.send('Twitter login failed')
-})
-
-router.get('/success', function (req, res) {
-  res.send('Twitter login success')
-  // let searchQuery = req.query.q
-  // client.get('search/tweets', {q: searchQuery}, function (error, tweets, response) {
-  //   const result = JSON.parse(response.body)
-  //   console.log({result})
-  //   res.send(tweets)
-  // })
-})
+router.get('/', passport.authenticate('twitter'))
 
 module.exports = router

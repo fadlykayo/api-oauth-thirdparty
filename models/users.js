@@ -2,12 +2,10 @@ const mongoose = require('mongoose')
 
 const UserSchema = new mongoose.Schema({
   username: {
-    type: String,
-    required: true
+    type: String
   },
   password: {
-    type: String,
-    required: true
+    type: String
   },
   email: String,
   token: String,
@@ -18,12 +16,10 @@ const UserSchema = new mongoose.Schema({
     name: String
   },
   twitter: {
-    type: String
-    // id: String,
-    // token: String,
-    // tokenSecret: String,
-    // displayName: String,
-    // username: String
+    id: String,
+    token: String,
+    displayName: String,
+    username: String
   },
   google: {
     id: String,
