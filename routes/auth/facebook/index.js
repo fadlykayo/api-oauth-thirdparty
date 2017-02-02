@@ -1,19 +1,26 @@
 var express = require('express')
 var router = express.Router()
-let booksController = require('../../controllers/books')
+let userController = require('../../../controllers/users')
+//
+// /* GET home page. */
+//
+// router.get('/', userController.getBooks)
+//
+// router.get('/:isbn', userController.getBook)
+//
+// router.post('/', userController.createBook)
+//
+// router.delete('/:isbn', userController.deleteBook)
+//
+// router.put('/:isbn', userController.updateBook)
+// //
+// // router.post('/signin', libraryController.signIn)
+//
+// module.exports = router
 
 /* GET home page. */
-
-router.get('/', booksController.getBooks)
-
-router.get('/:isbn', booksController.getBook)
-
-router.post('/', booksController.createBook)
-
-router.delete('/:isbn', booksController.deleteBook)
-
-router.put('/:isbn', booksController.updateBook)
-//
-// router.post('/signin', libraryController.signIn)
+router.get('/', function (req, res, next) {
+  res.send('facebook')
+})
 
 module.exports = router

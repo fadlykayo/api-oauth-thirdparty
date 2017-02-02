@@ -1,14 +1,11 @@
 let express = require('express')
 let router = express.Router()
-let Twitter = require('twitter')
-let config = require('../../config.json')
-let userController = require('../../controllers/users')
 let passport = require('passport')
 let TwitterStrategy = require('passport-twitter')
+let config = require('../../../config.json')
+let userController = require('../../../controllers/users')
 
-router.get('/', userController.verifyRole, userController.getUsers)
-
-// router.post('/', userController.verifyRole, userController.createUser)
+router.get('/', userController.getUsers)
 
 router.delete('/:id', userController.deleteUser)
 

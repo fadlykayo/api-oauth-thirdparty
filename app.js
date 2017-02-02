@@ -4,6 +4,7 @@ var favicon = require('serve-favicon')
 var logger = require('morgan')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
+require('dotenv').config()
 
 var index = require('./routes/index')
 var users = require('./routes/users')
@@ -15,12 +16,18 @@ var app = express()
 
 // Mongoose
 var mongoose = require('mongoose')
-var db = mongoose.connection
-mongoose.connect(`${process.env.MONGODB_URI}`)
-db.on('error', console.error.bind(console, 'connection error:'))
-db.once('open', function () {
-  console.log(`connected to ${process.env.PORT} ${process.env.MONGODB_URI}`)
+mongoose.connect(`${process.env.MONGODB_URI}`, function (err) {
+  if (err) {
+    console.log(err)
+  } else {
+    console.log(`connected to ${process.env.PORT} ${process.env.MONGODB_URI}`)
+  }
 })
+// var db = mongoose.connection
+// db.on('error', console.error.bind(console, 'connection error:'))
+// db.once('open', function () {
+//   console.log(`connected to ${process.env.PORT} ${process.env.MONGODB_URI}`)
+// })
 mongoose.Promise = global.Promise
 
 // view engine setup
