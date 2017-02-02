@@ -7,9 +7,9 @@ var bodyParser = require('body-parser')
 
 var index = require('./routes/index')
 var users = require('./routes/users')
-var facebookAuth = require('./routes/auth/facebook')
-var twitterAuth = require('./routes/auth/twitter')
-var googleAuth = require('./routes/auth/google')
+var facebookAuth = require('./routes/auth/facebook/index')
+var twitterAuth = require('./routes/auth/twitter/index')
+var googleAuth = require('./routes/auth/google/index')
 
 var app = express()
 
@@ -37,9 +37,9 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', index)
 app.use('/users', users)
-app.use('/auth/facebook', facebookAuth)
-app.use('/auth/twitter', twitterAuth)
-app.use('/auth/google', googleAuth)
+app.use('/auth/facebook/index', facebookAuth)
+app.use('/auth/twitter/index', twitterAuth)
+app.use('/auth/google/index', googleAuth)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
