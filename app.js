@@ -21,6 +21,16 @@ let config = require('./config.json')
 let Users = require('./models/users')
 let session = require('express-session')
 
+// Session
+
+app.set('trust proxy', 1) // trust first proxy
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}))
+
 // Mongoose
 
 var mongoose = require('mongoose')

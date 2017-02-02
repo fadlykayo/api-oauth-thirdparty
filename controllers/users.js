@@ -57,16 +57,6 @@ module.exports = {
     }).catch(function (err) {
       res.json(err)
     })
-  },
-  verifyRole: (req, res, next) => {
-    req.decoded = jwt.verify(req.header('Authorization'), config.secret)
-    if (req.decoded.data.role === 'admin') {
-      next()
-    } else if (req.decoded.data.role === 'user') {
-      res.json({message: 'Authentication failed. Role: user'})
-    } else {
-      res.json({message: 'Authentication failed.'})
-    }
   }
 }
 // fadly: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjpbeyJfaWQiOiI1ODkzMDc5OWQwM2MxMzJlMGE2NzNkZjMiLCJ1c2VybmFtZSI6ImZhZGx5IiwicGFzc3dvcmQiOiJzaGExJGFiN2U3ODg2JDEkYTMxMmU0MTVkYWNlMjcwNTZlMmM2ZWMyZTkzZTNlMTlkYjMwYWQxOCIsImNyZWF0ZWRBdCI6IjIwMTctMDItMDJUMTA6MTk6MDUuMTcwWiIsInVwZGF0ZWRBdCI6IjIwMTctMDItMDJUMTA6MTk6MDUuMTcwWiIsIl9fdiI6MH1dLCJpYXQiOjE0ODYwMzEwNTZ9.G-Ao8O1gK0vRxjaZ5byAgZ9aTI1TqJxdgcr3YvLTFpA

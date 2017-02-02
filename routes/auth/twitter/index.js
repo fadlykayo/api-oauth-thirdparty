@@ -16,14 +16,10 @@ router.post('/signin', userController.signIn)
 
 router.post('/signup', userController.signUp)
 
-router.get('/', passport.authenticate('twitter'))
+router.get('/', passport.authenticate('twitter', { failureRedirect: '/failed' }))
 
 router.get('/callback', function (req, res) {
-  passport.authenticate('twitter', { failureRedirect: '/failed' }),
-  function (req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/success')
-  }
+  console.log('login with twitter success')
 })
 
 router.get('/failed', function (req, res) {
