@@ -42,6 +42,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
+
 app.use(passport.initialize())
 app.use(passport.session()) // persistent login sessions
 
@@ -54,37 +55,6 @@ passport.deserializeUser(function (id, done) {
     done(err, user)
   })
 })
-
-// passport.use(new TwitterStrategy({
-//   consumerKey: config.twitter_api_key,
-//   consumerSecret: config.twitter_api_secret,
-//   callbackURL: 'http://127.0.0.1:3000/auth/twitter/callback'
-// },
-//   function (token, tokenSecret, profile, done) {
-//     process.nextTick(function () {
-//       User.findOne({ 'twitter.id': profile.id }, function (err, user) {
-//         if (err) {
-//           return done(err)
-//         }
-//         if (user) {
-//           return done(null, user)
-//         } else {
-//           var newUser = new User()
-//           newUser.twitter.id = profile.id
-//           newUser.twitter.token = token
-//           newUser.twitter.username = profile.username
-//           newUser.twitter.displayName = profile.displayName
-//           newUser.save(function (err) {
-//             if (err) {
-//               throw err
-//             }
-//             return done(null, newUser)
-//           })
-//         }
-//       })
-//     })
-//   }
-// ))
 
 passport.use(new TwitterStrategy({
   consumerKey: config.twitter_api_key,
@@ -105,6 +75,7 @@ passport.use(new TwitterStrategy({
           newUser.twitter.token = token
           newUser.twitter.username = profile.username
           newUser.twitter.displayName = profile.displayName
+
           newUser.save(function (err) {
             if (err) {
               throw err
