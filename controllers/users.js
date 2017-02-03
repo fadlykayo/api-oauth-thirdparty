@@ -63,8 +63,6 @@ module.exports = {
     // if (Us)
     // passport.authenticate('twitter')
     req.decoded = jwt.verify(req.header('Authorization'), config.secret)
-    console.log(req.decoded.data[0].password)
-    console.log(req.header('Password'))
     if (req.decoded.data[0].username === req.header('Username') && hash.verify(req.header('Password'), req.decoded.data[0].password)) {
       next()
     } else {
