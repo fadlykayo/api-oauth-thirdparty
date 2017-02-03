@@ -1,26 +1,26 @@
-let express = require('express')
-let router = express.Router()
+var express = require('express')
+var router = express.Router()
 let userController = require('../../../controllers/users')
-let passport = require('passport')
+//
+// /* GET home page. */
+//
+// router.get('/', userController.getBooks)
+//
+// router.get('/:isbn', userController.getBook)
+//
+// router.post('/', userController.createBook)
+//
+// router.delete('/:isbn', userController.deleteBook)
+//
+// router.put('/:isbn', userController.updateBook)
+// //
+// // router.post('/signin', libraryController.signIn)
+//
+// module.exports = router
 
-router.get('/get', userController.getUsers)
-
-router.delete('/:id', userController.deleteUser)
-
-router.put('/:id', userController.updateUser)
-
-router.post('/signin', userController.signIn)
-
-router.post('/signup', userController.signUp)
-
-router.get('/', passport.authenticate('facebook'))
-
-router.get('/failed', function (req, res) {
-  res.send('Facebook login failed')
-})
-
-router.get('/success', function (req, res) {
-  res.send('Facebook login success')
+/* GET home page. */
+router.get('/', function (req, res, next) {
+  res.send('facebook')
 })
 
 module.exports = router

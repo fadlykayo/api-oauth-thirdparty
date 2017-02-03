@@ -2,6 +2,6 @@ let express = require('express')
 let router = express.Router()
 let passport = require('passport')
 
-router.use('/', passport.authenticate('facebook', { successRedirect: '/auth/facebook/index/get', failureRedirect: '/auth/facebook/index/failed' }))
+router.use('/', passport.authenticate('google', { successRedirect: '/auth/google/index/get', failureRedirect: '/auth/google/index/failed' }))
 
 module.exports = router

@@ -8,10 +8,12 @@ var bodyParser = require('body-parser')
 
 var index = require('./routes/index')
 var users = require('./routes/users')
+var googleAuth = require('./routes/auth/google/index')
 var facebookAuth = require('./routes/auth/facebook/index')
 var twitterAuth = require('./routes/auth/twitter/index')
 var twitterCb = require('./routes/auth/twitter/callback')
-var googleAuth = require('./routes/auth/google/index')
+var facebookCb = require('./routes/auth/facebook/callback')
+var googleCb = require('./routes/auth/google/callback')
 
 require('dotenv').config()
 let passport = require('passport')
@@ -64,17 +66,41 @@ passport.use(new TwitterStrategy({
   function (token, tokenSecret, profile, done) {
     process.nextTick(function () {
       User.findOne({ 'twitter.id': profile.id }, function (err, user) {
-        if (err) {
-          return done(err)
-        }
-        if (user) {
-          return done(null, user)
-        } else {
+        if (err) return done(err)
+        if (user) { return done(null, user) } else {
           var newUser = new User()
           newUser.twitter.id = profile.id
           newUser.twitter.token = token
           newUser.twitter.username = profile.username
           newUser.twitter.displayName = profile.displayName
+
+          newUser.save(function (err) {
+            if (err) {
+              throw err
+            }
+            return done(null, newUser)
+          })
+        }
+      })
+    })
+  }
+))
+
+passport.use(new FacebookStrategy({
+  clientID: config.facebook_app_id,
+  clientSecret: config.facebook_app_secret,
+  callbackURL: 'http://localhost:3000/auth/facebook/callback'
+},
+  function (accessToken, refreshToken, profile, done) {
+    process.nextTick(function () {
+      User.findOne({ 'facebook.id': profile.id }, function (err, user) {
+        if (err) return done(err)
+        if (user) { return done(null, user) } else {
+          var newUser = new User()
+          newUser.facebook.id = profile.id
+          newUser.facebook.token = accessToken
+          // newUser.facebook.email = (profile.emails[0].value || '').toLowerCase()
+          newUser.facebook.name = profile.displayName
 
           newUser.save(function (err) {
             if (err) {
@@ -103,9 +129,11 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', index)
 app.use('/users', users)
 app.use('/auth/facebook/index', facebookAuth)
+app.use('/auth/facebook/callback', facebookCb)
 app.use('/auth/twitter/index', twitterAuth)
-app.use('/auth/google/index', googleAuth)
 app.use('/auth/twitter/callback', twitterCb)
+app.use('/auth/google/callback', googleCb)
+app.use('/auth/google/index', googleAuth)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

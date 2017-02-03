@@ -13,7 +13,7 @@ router.post('/signin', userController.signIn)
 
 router.post('/signup', userController.signUp)
 
-router.get('/twitterlogin', passport.authenticate('twitter'))
+router.get('/login', passport.authenticate('twitter'))
 
 router.get('/failed', function (req, res) {
   res.send('Twitter login failed')
