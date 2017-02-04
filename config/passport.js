@@ -1,10 +1,11 @@
 'use strict'
 
+var LocalStrategy = require('passport-local').Strategy
+let RegisterStrategy = require('passport-local-register').Strategy
 let TwitterStrategy = require('passport-twitter').Strategy
 let FacebookStrategy = require('passport-facebook').Strategy
 let GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
 let GithubStrategy = require('passport-github2').Strategy
-let RegisterStrategy = require('passport-local-register').Strategy
 let config = require('./config.json')
 let User = require('../models/users')
 
@@ -36,9 +37,7 @@ module.exports = function (passport) {
             newUser.twitter.displayName = profile.displayName
 
             newUser.save(function (err) {
-              if (err) {
-                throw err
-              }
+              if (err) throw err
               return done(null, newUser)
             })
           }
@@ -64,9 +63,7 @@ module.exports = function (passport) {
             newUser.facebook.name = profile.displayName
 
             newUser.save(function (err) {
-              if (err) {
-                throw err
-              }
+              if (err) throw err
               return done(null, newUser)
             })
           }
@@ -75,32 +72,29 @@ module.exports = function (passport) {
     }
   ))
 
-  // passport.use(new GoogleStrategy({
-  //   clientID: config.google_clientID,
-  //   clientSecret: config.google_clientSecret,
-  //   callbackURL: 'http://localhost:3000/auth/google/callback'
-  // },
-  //   function (token, refreshToken, profile, done) {
-  //     process.nextTick(function () {
-  //       User.findOne({ 'google.id': profile.id }, function (err, user) {
-  //         console.log(profile)
-  //         if (err) return done(err)
-  //         if (user) { return done(null, user) } else {
-  //           var newUser = new User()
-  //           newUser.google.id = profile.id
-  //           newUser.google.token = token
-  //           // newUser.google.email = (profile.emails[0].value || '').toLowerCase()
-  //           newUser.google.name = profile.displayName
-  //
-  //           newUser.save(function (err) {
-  //             if (err) {
-  //               throw err
-  //             }
-  //             return done(null, newUser)
-  //           })
-  //         }
-  //       })
-  //     })
-  //   }
-  // ))
+  passport.use(new GoogleStrategy({
+    clientID: config.google_clientID,
+    clientSecret: config.google_clientSecret,
+    callbackURL: 'http://localhost:3000/auth/google/callback'
+  },
+    function (token, refreshToken, profile, done) {
+      process.nextTick(function () {
+        User.findOne({ 'google.id': profile.id }, function (err, user) {
+          if (err) return done(err)
+          if (user) { return done(null, user) } else {
+            var newUser = new User()
+            newUser.google.id = profile.id
+            newUser.google.token = token
+            newUser.google.email = profile.emails[0].value
+            newUser.google.name = profile.displayName
+
+            newUser.save(function (err) {
+              if (err) throw err
+              return done(null, newUser)
+            })
+          }
+        })
+      })
+    }
+  ))
 }
