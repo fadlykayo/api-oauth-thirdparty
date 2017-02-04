@@ -1,27 +1,16 @@
+'use strict'
+
 var express = require('express')
 var router = express.Router()
 let jwt = require('jsonwebtoken')
 let hash = require('password-hash')
 let Users = require('../models/users')
-let config = require('../config.json')
+let config = require('../config/config.json')
 
 module.exports = {
   getUsers: (req, res) => {
     Users.find().then(function (data) {
       res.send({Users: data})
-    }).catch(function (err) {
-      res.json(err)
-    })
-  },
-  signUp: (req, res) => {
-    Users.create({
-      username: req.body.username,
-      password: hash.generate(req.body.password),
-      email: req.body.email,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }).then(function (data) {
-      res.json({data, success: true})
     }).catch(function (err) {
       res.json(err)
     })
@@ -55,6 +44,19 @@ module.exports = {
           res.json({success: false, message: 'Authentication failed. Wrong password.'})
         }
       }
+    }).catch(function (err) {
+      res.json(err)
+    })
+  },
+  signUp: (req, res) => {
+    Users.create({
+      username: req.body.username,
+      password: hash.generate(req.body.password),
+      email: req.body.email,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }).then(function (data) {
+      res.json({data, success: true})
     }).catch(function (err) {
       res.json(err)
     })
