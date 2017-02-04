@@ -91,16 +91,45 @@ passport.use(new FacebookStrategy({
   clientSecret: config.facebook_app_secret,
   callbackURL: 'http://localhost:3000/auth/facebook/callback'
 },
-  function (accessToken, refreshToken, profile, done) {
+  function (token, refreshToken, profile, done) {
     process.nextTick(function () {
       User.findOne({ 'facebook.id': profile.id }, function (err, user) {
         if (err) return done(err)
         if (user) { return done(null, user) } else {
           var newUser = new User()
           newUser.facebook.id = profile.id
-          newUser.facebook.token = accessToken
+          newUser.facebook.token = token
           // newUser.facebook.email = (profile.emails[0].value || '').toLowerCase()
           newUser.facebook.name = profile.displayName
+
+          newUser.save(function (err) {
+            if (err) {
+              throw err
+            }
+            return done(null, newUser)
+          })
+        }
+      })
+    })
+  }
+))
+
+passport.use(new GoogleStrategy({
+  clientID: config.google_clientID,
+  clientSecret: config.google_clientSecret,
+  callbackURL: 'http://localhost:3000/auth/google/callback'
+},
+  function (token, refreshToken, profile, done) {
+    process.nextTick(function () {
+      User.findOne({ 'google.id': profile.id }, function (err, user) {
+        console.log(profile)
+        if (err) return done(err)
+        if (user) { return done(null, user) } else {
+          var newUser = new User()
+          newUser.google.id = profile.id
+          newUser.google.token = token
+          // newUser.google.email = (profile.emails[0].value || '').toLowerCase()
+          newUser.google.name = profile.displayName
 
           newUser.save(function (err) {
             if (err) {

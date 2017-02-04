@@ -1,26 +1,26 @@
-var express = require('express')
-var router = express.Router()
+let express = require('express')
+let router = express.Router()
 let userController = require('../../../controllers/users')
-//
-// /* GET home page. */
-//
-// router.get('/', userController.getBooks)
-//
-// router.get('/:isbn', userController.getBook)
-//
-// router.post('/', userController.createBook)
-//
-// router.delete('/:isbn', userController.deleteBook)
-//
-// router.put('/:isbn', userController.updateBook)
-// //
-// // router.post('/signin', libraryController.signIn)
-//
-// module.exports = router
+let passport = require('passport')
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-  res.send('facebook')
+router.get('/get', userController.verify, userController.getUsers)
+
+router.delete('/:id', userController.deleteUser)
+
+router.put('/:id', userController.updateUser)
+
+router.post('/signin', userController.signIn)
+
+router.post('/signup', userController.signUp)
+
+router.get('/login', passport.authenticate('google'))
+
+router.get('/failed', function (req, res) {
+  res.send('Google login failed')
+})
+
+router.get('/success', function (req, res) {
+  res.send('Google login success')
 })
 
 module.exports = router
